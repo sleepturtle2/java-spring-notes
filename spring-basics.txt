@@ -1,0 +1,73 @@
+To enable debugging: 
+In application/properties: logging.level.org.springframework = debug
+
+->@Component automatically creates objects 
+->@Autowired enables automatic dependency injection 
+-> Spring does a Component scan of all components. 
+->Read: Constructor injection vs Setter Injection
+
+Options for autowiring: 1) Constructor injection 2) Setter injection 3) No Setter or Constructor 
+
+-> How to choose between Constructor and Setter injection? 
+By practice, if it is a compulsory dependency, then use a Constructor injection. Else, for optional dependency, use Setter injection. But now there is not a lot of difference in terms of performance. If the dependency is not found in the class, the @Autowired component will not be launched at all. 
+
+Spring Components; 
+
+ Core Container: Beans, Core, Context, SpEL
+ AOP(Aspect Oriented Programming) 
+ Aspects(Advanced Aspect Oriented Programming) 
+ Intrustrumentation 
+ Messaging 
+ Data Access/Integration: JDBC, ORM, OXM, JMS, Transactions
+ Web: WebSocket, Servlet, Portlet(outdated) Web 
+ 
+ Test (Cross-Container) 
+ 
+ -----
+ 
+ Spring Projects: Spring Batch, Spring Security, Spring HATEOAS, Spring Boot, Spring Cloud, Spring Cloud, Spring Data, Spring Integration 
+ 
+ ------
+  
+Why is Spring so popular? 
+1. It enables writing testable code. The core features of Spring is dependency injection. If used properly, we can write unit tests very easily. Spring has JUnit and Mockito for writing tests. 
+2. No plumbing code
+3. Flexible Architecture
+4. Staying Relevant
+
+----
+
+Maven: 
+
+-> Name of the project goes in the artifact 
+-> pom.xml (Project Object Model): Contains the configuration of the maven project  
+-> The 'groupId' and the 'artifactId' are the project identifiers. If this project has to be used elsewhere, then we can do so using only these two values. 
+-> <packaging>: can be jar, war (web archive), ear(enterprise archive, contains multiple wars)
+-> <parent>: specifies the parent of this project. The groupId and the artifactId identify the parent uniquely. 
+-> <properties>: specifies the version 
+-> <dependencies>: mentions each dependency, using the groupId and the artifactId to identify it uniquely. we can go to the pom.xml files of each of those dependencies. there we can file all the dependencies of that dependency (called transitive dependency). 
+-> <repositories>, listing each <repository>, containing the configuration of the project 
+
+
+Maven Build LifeCycle: 
+mvn install: 
+    - package: creates the jar 
+    - install: copies the created jar to local maven repository - a temp folder on the machine where maven stores the files. 
+
+Build Life Cycle: 
+- Validate
+- Compile 
+- Test 
+- Package 
+- Integration Test 
+- Verify 
+- Install 
+- Deploy 
+
+: 'mvn clean install' in the project directory executes all the steps in the build life cycle till intsall (before deploy)
+
+: 'mvn compile' or 'mvn clean compile' - runs only the compile step, 'mvn test compile' compiles only the test code 
+
+each mvn command runs all the life cycle steps from the validate upto that command step
+
+->  use 'help:effective settings' command to use maven while debugging or 'maven --debug'
