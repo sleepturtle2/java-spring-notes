@@ -1,11 +1,13 @@
-package com.spring.In28minutes;
+package basic;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class BinarySearchImplementation {
     @Autowired
+    @Qualifier("quick")
     private SortAlgorithm sortAlgorithm;
 
     public BinarySearchImplementation(SortAlgorithm sortAlgorithm)

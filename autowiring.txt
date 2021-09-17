@@ -1,0 +1,6 @@
+Types of autowiring: 
+-> Constructor autowiring
+-> Setter autowiring
+-> Autowiring by class-name: case insensitive. @Primary has higher priority over class-name autowiring 
+-> Use a qualifier: @Qualifier("some-name")
+-> Use @Primary for precedence 

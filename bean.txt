@@ -1,0 +1,12 @@
+Bean Scope : Default - singleton 
+-> singleton - One instance per Spring Context 
+-> prototype - New bean whenever requested 
+-> request - One bean per HTTP request 
+-> session - One bean per HTTP request 
+
+Notes: 
+-> If we request different instances of the same bean, we will get a copy of the same bean. In memory there will be only one bean
+
+If we want different beans to be created for the same bean class use: 
+-> @Scope("prototype") (but hardcoding it is not good practice)
+-> @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

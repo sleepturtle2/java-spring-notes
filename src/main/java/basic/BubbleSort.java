@@ -1,4 +1,4 @@
-package com.spring.In28minutes;
+package basic;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;

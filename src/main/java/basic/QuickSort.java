@@ -1,9 +1,11 @@
-package com.spring.In28minutes;
+package basic;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
-public class QuickSort implements SortAlgorithm{
+@Qualifier("quick")
+public class QuickSort implements SortAlgorithm {
     private int partition(int a[], int l, int r)
     {
         int pivot = a[r];

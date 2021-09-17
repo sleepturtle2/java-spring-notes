@@ -1,4 +1,4 @@
-package com.spring.In28minutes;
+package basic;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +13,11 @@ public class In28minutesApplication {
 		//Application Context
 		ApplicationContext applicationContext = SpringApplication.run(In28minutesApplication.class, args);
 		BinarySearchImplementation binarySearch = applicationContext.getBean(BinarySearchImplementation.class);
+		BinarySearchImplementation binarySearch1 = applicationContext.getBean(BinarySearchImplementation.class);
+
+		//print both to verify that they are copies of the same bean. not different
+		System.out.println(binarySearch);
+		System.out.println(binarySearch1);
 		int result = binarySearch.binarySearch(new int[] {12,4,6,1}, 4);
 		if(result == -1)
 			System.out.println("Element not found");
