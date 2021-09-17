@@ -10,3 +10,6 @@ Notes:
 If we want different beans to be created for the same bean class use: 
 -> @Scope("prototype") (but hardcoding it is not good practice)
 -> @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+
+To ensure a new instance is created every time @Autowired is called, we need to use something called a Proxy in the @Scope Annotation 
+: @Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode=ScopedProxyMode.TARGET_CLASS)
