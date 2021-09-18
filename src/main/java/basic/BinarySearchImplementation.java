@@ -1,11 +1,18 @@
 package basic;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
 @Component
 public class BinarySearchImplementation {
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     @Qualifier("quick")
     private SortAlgorithm sortAlgorithm;
@@ -44,5 +51,15 @@ public class BinarySearchImplementation {
         System.out.println();
 
         return binSearchIndex(sorted_array, element);
+    }
+
+    @PostConstruct
+    public void postConstruct(){
+        logger.info("postConstruct called");
+    }
+
+    @PreDestroy
+    public void preDestroy(){
+        logger.info("preDestroy called");
     }
 }

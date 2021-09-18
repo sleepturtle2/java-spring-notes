@@ -1,0 +1,7 @@
+CDI = Context and Dependency Injection : It is like an interface, which defines different annotations. 
+
+-Java EE Dependency Injection Standard (JSR-330)
+-Spring Supports most annotations
+    -@Inject (@Autowired)
+    -@Named (@Component & @Qualifier)
+    -@Singleton (Defines a scope of Singleton)

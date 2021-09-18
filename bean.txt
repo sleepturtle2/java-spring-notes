@@ -13,3 +13,15 @@ If we want different beans to be created for the same bean class use:
 
 To ensure a new instance is created every time @Autowired is called, we need to use something called a Proxy in the @Scope Annotation 
 : @Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode=ScopedProxyMode.TARGET_CLASS)
+
+Difference between Spring Singleton and GOF(Gang of Four) Singleton: 
+
+
+A Component Scan is defined automatically in all packages and subpackages of the program where SpringBootApplication is defined. Thus, @SpringBootApplication is same as writing @ComponentScan("[CURRENT_PACKAGE]"). If we want to scan components from other packages as well, as will need to define it explicitly in the @ComponentScan("package_name") along with the @SpringBootApplication. By default the @ComponentScan is defined only for the current packages and sub-packages. 
+
+----
+
+The @Component will create a bean and destroy it after it is used. The entire life-cycle of the bean is maintained by the Spring IOC (inversion of control) container. 
+-> If we want to make sure that we perform certain actions only after ALL the dependencies have been loaded, we can use a @PostConstruct(always a void method). 
+
+A similar annotation is availabe which is called before destroying: @PreDestroy
