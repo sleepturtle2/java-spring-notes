@@ -1,12 +1,12 @@
 package cdi;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import javax.inject.Inject;
+import javax.inject.Named;
 
-@Component
+@Named
 public class CdiExample {
 
-    @Autowired
+    @Inject
     CdiDao cdiDao;
 
     public CdiDao getCdiDao() {

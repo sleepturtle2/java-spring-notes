@@ -5,3 +5,5 @@ CDI = Context and Dependency Injection : It is like an interface, which defines 
     -@Inject (@Autowired)
     -@Named (@Component & @Qualifier)
     -@Singleton (Defines a scope of Singleton)
+
+    CDI is a Java EE Standard. Both(CDI & Spring) provide roughly the same functionalities. It is a matter of choice. 
