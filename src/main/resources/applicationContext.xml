@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+            http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd ">
+
+    <context:component-scan base-package="basic"></context:component-scan>
+    <context:component-scan base-package="cdi"></context:component-scan>
+    <context:component-scan base-package="componentscan"></context:component-scan>
+    <context:component-scan base-package="scope"></context:component-scan>
+    <context:component-scan base-package="xml"></context:component-scan>
+    <context:component-scan base-package="properties"></context:component-scan>
+
+    <bean id="xmlJdbcConnection" class="xml.XMLJdbcConnection">
+        <!-- collaborators and configuration for this bean go here -->
+    </bean>
+
+    <bean id="xmlPersonDao" class="xml.XMLPersonDao">
+        <!-- collaborators and configuration for this bean go here -->
+        <property name="xmlJdbcConnection" ref="xmlJdbcConnection"></property>
+    </bean>
+
+    <!-- more bean definitions go here -->
+
+</beans>

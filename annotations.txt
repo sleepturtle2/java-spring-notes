@@ -1,0 +1,15 @@
+Component Annotations 
+
+-@Component - Generic Component 
+-@Repository - encapsulating storage, retrieval, and search behavior typically from a relational database 
+-@Service - Business Service Facade 
+-@Controller - Controller in MVC pattern
+
+Except @Component, all others are specific to the layer. @Controller - UI 
+layer, @Service - Business Service layer, @Repository - gets data from 
+the data layer 
+
+@Service can be replaced with @Component too. So why should we use 
+specific annotations. We can identify the annotations and add 
+functionality to them. We can categorise our components and apply 
+different logic to them. 

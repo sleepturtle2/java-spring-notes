@@ -1,0 +1,10 @@
+Read-> 1. IOC Container  2. Application Context  3. Bean Factory
+
+Read Inversion of Control. The program or the framework whihc provides 
+for this, is called the IOC Container. It manages the beans. It creates 
+an instance of classes, create beans and autowire them. There are two 
+implementations of the IOC Container: first is the Application Context, 
+and the second is the Bean Factory. 
+
+Application Context: Bean Factory++ -> Spring AOP features, I18n capabilites, WebApplicationContext for web applications etc
+
