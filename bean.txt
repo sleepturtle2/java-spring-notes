@@ -1,3 +1,7 @@
+Beans - A bean is just an instance of a class that spring is aware of 
+- Beans can be defined using @Component annotation 
+
+
 Bean Scope : Default - singleton 
 -> singleton - One instance per Spring Context 
 -> prototype - New bean whenever requested 

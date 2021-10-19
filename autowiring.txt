@@ -1,3 +1,8 @@
+Dependency Injection Type: 
+- Constructor Based (add @Autowired before the constructors)
+- Setter Based  (add @Autowired before the setters)
+- Field Based (add @Autowired before field members aka class variables)
+
 Types of autowiring: 
 -> Constructor autowiring
 -> Setter autowiring
