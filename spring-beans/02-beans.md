@@ -77,4 +77,29 @@ The prototype scope used for maintaining stateful data.
 ## Bean Lifecycle 
 Container started -> Bean instantiated -> Dependencies injected -> 
 Internal Spring Processing -> Your Custom Init method -> Bean is ready for use -> 
-Container is shut down 
+Container is shut down -> Your Custom Detroy Method -> Stop 
+
+### Bean Lifecycle Methods / Hooks 
+You can add custom code during bean initialization 
+- Calling custom business logic methods 
+- Setting up handles to resources (db, sockets, file, etc)
+
+You can add custom code during bean destruction 
+- Calling custom business logic 
+- Clean up handles to resources(db, sockets, files, etc)
+
+#### Init/Destroy : method configuration 
+```
+<beans...>
+  <bean id="myCoach"
+    class="com.springdemo.TrackCoach"
+    init-method="doMyStartupStuff"
+    destroy-method="doMyCleanupStuff"
+    scope="singleton/prototype">
+    </bean>
+</beans>
+```
+
+### Development Process 
+1. Define your methods for init and destroy 
+2. Configure the method names in Spring config file 
