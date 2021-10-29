@@ -52,3 +52,29 @@ example applicationContext.xml file :
 
 </beans>
 ```
+
+## Bean Scopes 
+Scope refers to the lifecycle of a bean. Default scope of a bean is a Singleton.
+What is a Singleton? 
+- Spring Container creates only one instance of the bean, by default. It is cached in memory. All request for the bean will return a SHARED reference to the SAME bean. 
+
+Example: let there be two variable declarations for a bean myCoach : 
+Coach theCoach = context.getBean("myCoach", Coach.class); 
+and 
+Coach alphaCoach = context.getBean("myCoach", Coach.class); 
+
+Both theCoach and alphaCoach will be references to the same bean basically. The object references point to the same area in memory. Thus the singleton bean is a default and the best use case for this is a stateless bean, ie where you dont need to maintain any state. If you need to explicitly specify, then write scope="singleton" in the bean definition. 
+
+Other bean scopes: 
+singleton - Create a single shared instance of the bean. Default scope 
+prototype - Creates a new bean instance for each container request 
+request - Scoped to an HTTP web request. Only used for web apps 
+session - Scoped to an HTTP web session. Only used for web apps 
+global-session - Scoped to a global HTTP web session. Only used for web apps. 
+
+The prototype scope used for maintaining stateful data. 
+
+## Bean Lifecycle 
+Container started -> Bean instantiated -> Dependencies injected -> 
+Internal Spring Processing -> Your Custom Init method -> Bean is ready for use -> 
+Container is shut down 
