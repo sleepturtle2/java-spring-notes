@@ -190,3 +190,73 @@ public class Customer{
 ```
 
 ## Giving Custom Error Messages during Form Validation 
+1. Create custom error message in -> src/resources/messages.properties
+File messages.properties: 
+```
+typeMismatch.customer.freePasses=Invalid number 
+```
+typeMismatch = error type 
+customer = spring model attribute name 
+freePasses = field name 
+
+Note: How do you figure out the property? 
+    - each error type in the validator has a particular code. make an error, and check the error code in the console output. now override that and provide a custom message. In this case, the code was typeMismatch.customer.freePasses. so we used that and provided a custom message of 'Invalid Number' 
+
+2. Load custom messages resource in Spring config file 
+    -> webapp/WEB-INF/spring-mvc-demo-servlet.xml
+
+## Creating Custom Validation with Spring MVC
+Let's say we have a business logic that a certain code must start with 'LUV'. For this, we have to create a custom Java annotation, such that the code looks like this: 
+```
+@CourseCode(value="LUV", message="must start with LUV")
+private String courseCode; 
+```
+
+1. Create a custom validation rule
+    - Create @CourseCode annotation (this is how any custom annotation is defined in java)
+    ```
+    //this class contains our business logic
+    @Constraint(validatedBy=CourseCodeConstraintValidator.class) 
+    //specifies that we can apply this to any method or field (variable)
+    @Target( {ElementType.METHOD, ElementType.FIELD} ) 
+    //retain this annotation in the Java class file. Process it at runtime
+    @Retention(RetentionPolicy.RUNTIME)     
+    public @interface CourseCode{
+
+        //define default course code 
+        public String value() default "LUV"; 
+
+        //define default error message 
+        public String message() default "must start with LUV"; 
+
+        ...
+    }
+    ```
+
+    - Create @CourseCodeConstraintValidator (helper class with the business logic)
+    ```
+    public class CourseCodeConstraintValidator implements ConstraintValidator<CourseCode, String> {
+        private String coursePrefix; 
+
+        @Override
+        public void initialize(CourseCode theCourseCode){
+            coursePrefix = theCourseCode.value(); 
+        }
+
+        @Override
+        public boolean isValid(String theCode, ConstraintValidatorContext theConstraintValidatorContext){
+            boolean result; 
+
+            if(theCode != null){
+                result = theCode.startsWith(coursePrefix); 
+            }
+            else{
+                result = true; 
+            }
+            return result; 
+        }
+    }
+    ```
+2. Add validation rule to Customer class 
+3. Display error messages on HTML form 
+4. Update confirmation page 
