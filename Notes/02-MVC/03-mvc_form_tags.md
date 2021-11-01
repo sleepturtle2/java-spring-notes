@@ -169,3 +169,24 @@ public void initBinder(WebDataBinder dataBinder){
     StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true); 
     dataBinder.registerCustomEditor(String.class, stringTrimmerEditor); 
 }
+
+## @Min and @Max
+```
+public class Customer {
+    @Min(value=0, message="must be greater than or equal to zero")
+    @Max(value=10, message="must be less than or equal to 10")
+    private int freePasses; 
+    // getter / setter methods
+}
+```
+
+## Validating Regex Patterns (@Pattern annotation)
+```
+public class Customer{
+
+    @Pattern(regexp="^[a-zA-Z0-9]{5}", message="only 5 chars/digits")
+    private String postalCode; 
+}
+```
+
+## Giving Custom Error Messages during Form Validation 
