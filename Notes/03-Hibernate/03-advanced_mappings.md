@@ -109,6 +109,31 @@ There is a mapping from Instructor --> Instructor Detail. This is a uni-directio
 Note: Even with the bi-directional setup, we dont need to update the database schema, only the java code. Steps: 
 1. Make updates to InstructorDetail class
     1. Add new field to reference Instructor 
+    ```
+    @Entity
+    @Table(name="instructor_detail")
+    public class InstructorDetail{
+        @OneToOne(mappedBy="instructorDetail, cascade=CascadeType.ALL")
+        private Instructor instructor; 
+
+        //getters and setters here
+    }
+    ```
     2. Add getter/setter methods for Instructor 
     3. Add @OneToOne annotation
 2. Create Main App
+```
+public static void main(String args[]){
+    //get the instructor detail object 
+    int theId = 1; 
+    InstructorDetail tempInstructorDetail = session.get(InstructorDetail.class, theId); 
+
+    //print associated instructor 
+    System.out.println(tempInstructorDetail.getInstructor()); 
+}
+```
+
+Note: More on mappedBy: it tells Hibernate 
+    - to look at the instructorDetail property in the Instructor class
+    - and Use information from the Instructor class @JoinColumn
+    - to help find associated instructor
