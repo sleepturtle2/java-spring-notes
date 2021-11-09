@@ -104,6 +104,8 @@ public class Instructor{
 })
 ```
 
+Note: If you wanna avoid Cascase Delete, then put all CascadeTypes except 'REMOVE'
+
 ## Bidierctional One-to-One Mapping 
 There is a mapping from Instructor --> Instructor Detail. This is a uni-directionl mapping. If we want to load an InstructorDetail object and get the corresponding Instructor object, we will need a bidirectional mapping. 
 Note: Even with the bi-directional setup, we dont need to update the database schema, only the java code. Steps: 
@@ -137,3 +139,128 @@ Note: More on mappedBy: it tells Hibernate
     - to look at the instructorDetail property in the Instructor class
     - and Use information from the Instructor class @JoinColumn
     - to help find associated instructor
+
+## Deleting a single object, in Bi-Directional Mapping 
+Only delete InstructorDetail, keep the Instructor. 
+```
+//if we want to delete only instructorDetail, without deleting the instructor class, we have to modify the cascade to include everything except remove
+	@OneToOne(mappedBy="instructorDetail", cascade= {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}) 
+	private Instructor instructor; 	
+```
+Main app: 
+```
+
+			// start a transaction
+			session.beginTransaction();
+			
+			//get the instructor detail object 
+			int theId = 3; 
+			InstructorDetail tempInstructorDetail = session.get(InstructorDetail.class, theId); 
+			
+			//print the instructor detail 
+			System.out.println("tempInstructorDetail: " + tempInstructorDetail);
+			
+			//print the associated object 
+			System.out.println("associated instructor: " + tempInstructorDetail.getInstructor());
+			
+			//delete the instructor detail 
+			System.out.println("Deleting tempInstructorDetail: " + tempInstructorDetail);
+			session.delete(tempInstructorDetail);  
+			
+			//remove the associated object reference
+			//break bi-directional link 
+			tempInstructorDetail.getInstructor().setInstructorDetail(null);
+			session.delete(tempInstructorDetail); 
+			// commit transaction
+			session.getTransaction().commit();
+```
+
+## One-to-Many BiDirectional Mapping 
+One-to-Many mapping will be when an instructor will have many courses. Many-to-One mapping will be when many courses have one instructor. 
+Note: If there is a project requirement that if you delete an instructor, do not delete the courses and vice-versa, then what it means it that we have to omit cascading deletes. 
+Development Process: 
+1. Define DB tables
+    - table 'Course' has PK id, unique key title, foreign key instructor_id (references 'instructor' ('id'))
+
+2. Create Course class
+```
+@Entity
+@Table(name='course')
+public class Course{
+    @ManyToOne
+    @JoinColumn(name="instructor_id")
+    private Instructor instructor; 
+}
+```
+3. Update Instructor class
+```
+@Entity
+@Table(name="instructor")
+public class Instructor{
+    @OneToMany(mappedBy="instructor")
+    private List<Course>courses; 
+
+    //getter/setter
+
+    //add convenience methods for bi-directional
+    public void add(Course tempCourse){
+        if(courses == null)
+        courses = new ArrayList<>(); 
+
+        courses.add(tempCourse); 
+        tempCourse.setInstructor(this); 
+    }
+}
+```
+4. Create Main app
+
+
+## Fetch Types: Eager vs Lazy Loading 
+When we fetch/retrieve data, should we retrieve everything? 
+    - Easger will retrieve everything 
+    - Lazy will retrieve on request 
+
+- Eager Loading will load all dependant entities. Load instructor and all of their courses all at once 
+- Lazy Loading will load the main entity first, then the dependent entities on demand. However, this requires an open Hibernate session because it needs a connection to database to retrieve data.  If the Hibernate session is closed, Hibernate will throw an exception(LazyInitializationException). So we can retrieve data using: 
+    - 1. session.get and call appropriate getter methods
+    - 2. Hibernate query with HQL
+
+Best Practice: Prefer Lazy Loading instead of Eager Loading always!
+```
+@OneToMany(fetch=FetchType.LAZY, mappedBy="instructor")
+private List<Course> courses; 
+```
+
+### Default Fetch Types: 
+- @OneToOne - FetchType.EAGER
+- @OneToMany - FetchType.LAZY
+- @ManyToOne - FetchType.EAGER
+- @ManyToMany - FetchType.LAZY
+
+## One-To-Many Mapping (UniDirectional)
+A course can have many reviews. If we delete the course, we should also delete the reviews (Cascading Delete). 
+(Dev process similar to the other ones)
+
+## Many-to-Many Mapping 
+A course can have many students. A student can have many courses. We need to track which student is in which course and vice-versa. Here we will make use of a Join Table. 
+Join Table: A table that provides a mapping between two tables. It has foreign keys for each table to define the mapping relationship. 
+### @JoinTable
+```
+public class Course{
+    @ManyToMany
+    @JoinTable(
+        name="course_student"
+        joinColumns=@JoinColumn(name="course_id")
+        inverseJoinColumns=@JoinColumn(name="student_id")
+        )
+        private List<Student> students; 
+}
+```
+@JoinTable tells Hibernate: 
+    - Look at the course_id column in the course_student table 
+    - For other side(inverse), look at the student_id column in the course_student table
+    - Use this information to find relationship between course and students
+More on "inverse":
+- In this context, we are defining the relationship in the Course class. 
+- The Student class is on the 'other side', so it's called inverse
+- 'Inverse' refers to the 'other side' of the relationship
