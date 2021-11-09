@@ -245,6 +245,7 @@ A course can have many reviews. If we delete the course, we should also delete t
 A course can have many students. A student can have many courses. We need to track which student is in which course and vice-versa. Here we will make use of a Join Table. 
 Join Table: A table that provides a mapping between two tables. It has foreign keys for each table to define the mapping relationship. 
 ### @JoinTable
+Course.java: 
 ```
 public class Course{
     @ManyToMany
@@ -256,6 +257,20 @@ public class Course{
         private List<Student> students; 
 }
 ```
+Student.java: 
+```
+public class Student{
+    @ManyToMany
+    @JoinTable(
+        name="course_student",
+        joinColumns=@JoinColumn(name="student_id"),
+        inverseJoinColumns=@JoinColumn(name="course_id")
+    )
+    private List<Course> courses; 
+}
+```
+
+
 @JoinTable tells Hibernate: 
     - Look at the course_id column in the course_student table 
     - For other side(inverse), look at the student_id column in the course_student table
@@ -264,3 +279,6 @@ More on "inverse":
 - In this context, we are defining the relationship in the Course class. 
 - The Student class is on the 'other side', so it's called inverse
 - 'Inverse' refers to the 'other side' of the relationship
+
+Real World Requirement: 
+If you delete a course, do not delete the students. So we dont apply the Cascade Delete here. 
