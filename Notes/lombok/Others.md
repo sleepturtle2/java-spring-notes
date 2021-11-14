@@ -1,0 +1,4 @@
+- @Data - Equivalent to @Getter @Setter @RequiredArgsConstructor @ToString @EqualsAndHashCode.
+- @NoArgsConstructor - Generates a no-args constructor. Will generate an error message if such a constructor cannot be written due to the existence of final fields.( This is done so that later we can set the final fields using setters. If you want to override with default behaviour, pass "(force=true)" to the annotation). NB: Fields with constraints such as @NonNull will NOT be checked in a @NoArgsConstructor constructor, of course!
+
+- @AllArgsConstructor - Generates an all-args constructor. An all-args constructor requires one argument for every field in the class. The constructor will throw a NullPointerException if any of the parameters intended for the fields marked with @NonNull contain null

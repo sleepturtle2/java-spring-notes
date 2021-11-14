@@ -1,0 +1,10 @@
+ - slf4j-api is an example of a good logging API. 
+ - Logging implementation, using Logback: Each logging implementation, also called binding, has their own way of configuring the log output, but your application will remain agnostic and always use the same org.slf4j.Logger API.- Logback is built using Maven. It has three main components: 
+    - loggers: responsible for capturing logging information
+    - appenders: responsible for publishing logging information to various preferred destinations
+    - layouts: responsible for formatting logging information in different styles
+- logback also has filters: based on ternary logic allowing them to be assembled or chained together to compose an arbitrarily complex filtering policy. They are largely inspired by Linux iptables
+- Logging behavior can be set at runtime using a configuration file
+- It uses multiple levels, namely TRACE, DEBUG, INFO, WARN, ERROR, which controls the granularity, severity and verbosity of information
+- format of log output can be changed by implementing the Layout interface
+- the target or destination of log output as well as the writing strategy can be modified by switching implementations of the Appender interface
