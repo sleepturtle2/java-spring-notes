@@ -102,6 +102,99 @@ public interface T_Dao extends JpaRepository<T_Dao, Long>{
 }
 ```
 
+***** 
+
+## 2. SAMPLE MODULE STUDY: "test-profile" endpoints 
+(All following endpoints have /test-profile prefix. eg /count = /test-profile/count)
+
+
+get - /counts : 
+    RE returns a JSONObject with key as count. Value is returned from the Service layer file. Get the value from the Dao(Query in Dao). 
+
+get - /get/all :
+    -  RE returns a List of Dtos. From the SL, method runs findAll method(Jpa interface method) on the Dao instance. This method(findAll) returns a List of type T (JpaRepository usually has <ENTITY_CLASS, Long> or <ENTITY_CLASS, String>, for eg for TestProfileDao it is <TestProfile, Long>). Now this is List of entities. Need to transform to Dto and then pass it to the RE. (To change from entity to Dto, use a builder method on the Dto and build the object using ENTITY.getPROPERTY()). 
+
+
+get - /test-profiles/{id}/get :
+     RE returns Dto, id of type Long.  
+    Dao stores Entity. so entity is retrieved from Dao, transformed to Dto (using builder methods).
+    
+     Dto has a list pf profile_dtl. That needs to be filled separately (querying on the db using Dto id). For that we get list of entities from the dao. Transform that to a list of profile_dtl using a transformer method (use builder methods on the dto using entity-get values). now list of profile_dtls inside the dto has been set.
+
+     now just return RE of Dto. 
+
+    NB - Here the service method uses the Optional Object as findById might return null. 
+
+
+post - /test-profiles/create
+    - RE returns Dto that is created. 
+
+    Because this is a post method, we must run a validation middleware (pass the Dto, Http Protocol{type enum}).
+
+    Controller layer = Get the Dto from the Service layer. Service layer returns an entity, which you need to transform to Dto (using builder methods on entity). This entity contains a list of dtl_dto. Get the list from the Dao as a list of entities and transform that to a list of dtos, storing into dtl_dto. set the list in the entity and return. 
+
+
+    Service layer = there are two parts: one, getting the entity from the dao. two, getting the list of entities from another dao and set the list in the first entity. 
+        First part. method is annotated by "@Transactional" because of row creation on the db (transaction). Input Dto -> Entity (use builder methods on the entity from dto-get values) -> save to Dao as entity. Next, check if input Dto not null, then set the list from the input Dto into the entity and save in the Dao. return entity which is saved. 
+
+        Second part. get list of entities from dao -> transform to list of dto and save in the input Dto list of dtos. 
+
+
+
+put - /{id}/update
+    - RE returns a Dto. ResponseBody has a Dto
+    Validate since put method (Dto, HttpMethod enum value = PUT)
+
+    Very similar to above one. also has two similar parts. controller is the same. returns the updated Dto. 
+
+    Service layer: 
+        - First part. Uses an Optional object as findById could be null. save the incoming Dto to the Dao. Get list in similar way 
+        - Second part. Similar to the previous endpoint 
+
+
+delete - /{id}/delete
+    [same like put]
+
+****
+
 Question: 
 1. where are the methods like findByTestId defined? (most probably in the JpaRepository. but then why are we having to re-declare it? probably because to pass the appropriate data type to generics. Not sure)
 
+
+NOTES: 
+1. ResponseEntity
+In the return type you either leave it empty or usually return a DTO. For JSON, use "ResponseEntity<JSONObject>".
+
+    - The notation for returning JSONObject to the ResponseEntity: 
+    ```
+    Long testProfileCount = testProfileDao.getCountOfActiveTestProfiles(); 
+    JSONObject jsonObj = new JSONObject(); 
+    jsonObt.put("count", testProfileCount); 
+    return jsonObj;
+    ```
+
+2. Optional
+Use this when any type T might be null. 
+
+Used in cases where you are querying the db for an id-based value. this might return null.
+```
+Optional<T> testProfile = testProfileDao.findById(id); 
+return testProfile.orElseThrow(() -> new ResourceNotFoundException([entity String], [field String], [value Object])); 
+
+//Object here can be Long too (wrapper classes considered objects)
+
+```
+
+3. Check for null (Dtos, etc) 
+```
+isNull.negate().test(OBJECT_TO_TEST)
+```
+The above code returns true if OBJECT_TO_TEST is not null. 
+
+4. When there is write on the DB, it is a transaction. Such methods must be annotated by @Transactional.   
+
+5. Class<?> : Class is a parameterizable class, hence you can use the syntax Class<T> where T is a type. By writing Class<?>, you're declaring a Class object which can be of any type (? is a wildcard). The Class type is a type that contains meta-information about a class.
+
+It's always good practice to refer to a generic type by specifying his specific type, by using Class<?> you're respecting this practice (you're aware of Class to be parameterizable) but you're not restricting your parameter to have a specific type. 
+
+Used on delete requests, as the return type is just a status object (flexible). 
